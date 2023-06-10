@@ -3,7 +3,89 @@
  padding: 0;
 
 }
+.titleHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.shoppingCartLogo{
+  margin-right: 3rem;
+  width: 2rem;
+  cursor: pointer;
+}
 
+/* Carousel */
+.bestsellingheader{
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+.bestSelling{
+  margin: 4rem;
+  width: 80vw;
+  border: 0px;
+  margin-top: 0rem;
+}
+.bookPictures{
+  display: flex;
+  justify-content: center;
+}
+.bookPrices{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bookElement {
+  padding-left: 3rem;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+}
+.bestsellingTitle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.bookDescriptions{
+  display: -webkit-box;
+  width: 200px;
+  -webkit-line-clamp: 7; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  margin-left: 2rem;
+  height: 300px;
+  margin-right: 2rem
+}
+.bookDescriptions:hover{
+  overflow-y: auto;
+}
+.bookTitles{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+}
+/* Navigation arrows */
+.slick-prev, .slick-next{
+}
+.slick-prev:before,
+.slick-next:before {
+  color: #000!important;
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* Carousel dots (optional) */
+.slick-dots li button:before {
+  color: #000;
+}
 
 /* Add Book */
 .chosenImg{
@@ -75,6 +157,10 @@
 /* Display books */
 .display{
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .addContainer{
   display: flex;
@@ -188,11 +274,16 @@
 }
 .inventoryTittle{
   display: flex;
-  justify-content: center;
   align-items: center;
+  margin-left: 3rem;
 }
 a{
   text-decoration: none;
   color: inherit;
   outline: none;
+}
+
+/*Shopping cart */
+.bookCheckoutImage{
+  width: 4rem;
 }

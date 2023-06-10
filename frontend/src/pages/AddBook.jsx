@@ -10,6 +10,7 @@ function AddBook() {
     description: '',
     cover: "",
     price: null,
+    points: "",
   });
 
   const navigate = useNavigate();
@@ -26,7 +27,6 @@ function AddBook() {
     e.preventDefault();
   
     try {
-      // Upload the selected file to Cloudinary
       const formData = new FormData();
       formData.append("file", bookInfo.cover);
       formData.append("upload_preset", "twitter-clone");
@@ -43,6 +43,8 @@ function AddBook() {
         description: bookInfo.description,
         cover: coverUrl,
         price: bookInfo.price,
+        points: bookInfo.points,
+
       };
       console.log(book)
       await axios.post("http://localhost:8000/books", book);
@@ -52,6 +54,7 @@ function AddBook() {
         description: "",
         cover: "",
         price: null,
+        points: "",
       });
       navigate("/");
     } catch (error) {
@@ -125,6 +128,18 @@ function AddBook() {
                   required
                   onChange={onChangeBookInfo}
                   placeholder="Price"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="number"
+                  className="form-control"
+                  id="points"
+                  name="points"
+                  required
+                  onChange={onChangeBookInfo}
+                  placeholder="Points"
                   autoComplete="off"
                 />
               </div>

@@ -13,7 +13,8 @@ function UpdateBook() {
     {  title: '',
     description: '',
     cover: '',
-    price: ""
+    price: "",
+    points: "",
   });
 
   useEffect(() => {
@@ -27,7 +28,8 @@ function UpdateBook() {
               title: bookMaterial.title,
               description: bookMaterial.description,
               cover: bookMaterial.cover,
-              price: bookMaterial.price
+              price: bookMaterial.price,
+              points: bookMaterial.points,
             });
 
           
@@ -59,6 +61,7 @@ function UpdateBook() {
             description: "",
             cover: "",
             price: "",
+            points: "",
             }) 
             navigate('/')
 
@@ -120,7 +123,18 @@ function UpdateBook() {
                   autoComplete="off"
 
                  />
-              </div>          
+              </div>      
+              <div className="form-group">
+                  <input type="number" className="form-control" id="points" 
+                  name="points" 
+                  required
+                  value={bookInfo.points}
+                  onChange={onChangeBookInfo}
+                  placeholder= "Points" 
+                  autoComplete="off"
+
+                 />
+              </div>       
             </div>
             <div className="form-group">
               <button className="submitBtn" type="submit" > Update </button>
