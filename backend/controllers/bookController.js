@@ -82,29 +82,40 @@ const updateBook = async (req, res) => {
     });
 }
 
-//POST,  Link logged user to cart, /cartuser/:id/add
-const connectUserToCart = async (req, res) => {
-  const user_id = req.params.id;
-  console.log(req.body)
-  const { book_id, quantity, total_price } = req.body;
+//POST, checkout for multiple books, /cartuser/:id/add
 
-  if (!book_id || !quantity || !total_price) {
-    return res.status(400).json({ error: 'Missing required fields' });
+const addBooksToCart = async (req, res) => {
+  const user_id = req.params.id;
+  const cartItems = Array.isArray(req.body) ? req.body : [req.body];
+
+  if (cartItems.length === 0) {
+    return res.status(400).json({ error: 'Invalid cart items data' });
   }
 
   const db = req.db;
-  const sql = 'INSERT INTO cart (user_id, book_id, quantity, total_price) VALUES (?, ?, ?, ?)';
-  const values = [user_id, book_id, quantity, total_price];
 
   try {
-    await db.query(sql, values);
-    console.log('Item added to cart');
-    res.json({ message: 'Item added to cart' });
+    for (const item of cartItems) {
+      const { book_id, quantity, total_price } = item;
+
+      if (!book_id || !quantity || !total_price) {
+        console.error('Invalid cart item data:', item);
+        continue; // Skip this item and proceed to the next one
+      }        
+      const sql =
+       'INSERT INTO cart (user_id, book_id, quantity, total_price) VALUES (?, ?, ?, ?)';
+      const values = [user_id, book_id, quantity, total_price];
+      await db.query(sql, values);
+      console.log('Item added to cart');
+    }
+    res.json({ message: 'Items added to cart' });
+
   } catch (err) {
-    console.error('Error adding item to cart:', err);
+    console.error('Error adding items to cart:', err);
     res.sendStatus(500);
   }
 };
+
 
 //GET, get logged user cart, /cartuser/:id
 
@@ -128,16 +139,80 @@ const getUserCart = async (req, res) => {
   });
 };
 
-const deleteCart = () => {
+// //POST,  Link logged user to cart, /cartuser/:id/add
+// const connectUserToCart = async (req, res) => {
+//   const user_id = req.params.id;
+//   console.log(req.body);
+//   const { book_id, quantity, total_price } = req.body;
 
-}
+//   if (!book_id || !quantity || !total_price) {
+//     return res.status(400).json({ error: 'Missing required fields' });
+//   }
 
-const updateCart = () => {
-  
-}
+//   const db = req.db;
+
+//   try {
+//     // Check if the book is already present in the user's cart
+//     const existingCartItem = await db.query(
+//       'SELECT * FROM cart WHERE user_id = ? AND book_id = ?',
+//       [user_id, book_id]
+//     );
+//       console.log(existingCartItem + "existingCartItem")
+//       console.log(existingCartItem.length)
+//     if (existingCartItem.length > 0) {
+//       // If the book is already in the cart, update the quantity
+//       const updatedQuantity = existingCartItem[0].quantity + quantity;
+//       await db.query(
+//         'UPDATE cart SET quantity = ? WHERE user_id = ? AND book_id = ?',
+//         [updatedQuantity, user_id, book_id]
+//       );
+//       console.log('Cart item quantity updated');
+//     } else {
+//       // If the book is not in the cart, add a new entry
+//       const sql =
+//         'INSERT INTO cart (user_id, book_id, quantity, total_price) VALUES (?, ?, ?, ?)';
+//       const values = [user_id, book_id, quantity, total_price];
+//       await db.query(sql, values);
+//       console.log('Item added to cart');
+//     }
+
+//     res.json({ message: 'Item added to cart' + book_id + user_id });
+//   } catch (err) {
+//     console.error('Error adding item to cart:', err);
+//     res.sendStatus(500);
+//   }
+// };
+
+
+//PUT, /cartuser/:id/update/:book
+// const updateCart = async (req,res) => {
+//   const user_id = req.params.id;
+//   const book_id = req.params.book;
+//   const { quantity, total_price } = req.body;
+
+//   if (!quantity || !total_price) {
+//     return res.status(400).json({ error: 'Missing required fields' });
+//   }
+
+//   const db = req.db;
+
+//   try {
+//     // Update the cart item with the new quantity and total price
+//     await db.query(
+//       'UPDATE cart SET quantity = ?, total_price = ? WHERE user_id = ? AND item_id = ?',
+//       [quantity, total_price, user_id, book_id]
+//     );
+//     console.log('Cart item updated');
+
+//     res.json({ message: 'Cart item updated' });
+//   } catch (err) {
+//     console.error('Error updating cart item:', err);
+//     res.sendStatus(500);
+//   }
+// }
 
 
 module.exports = {getAllBooks, updateBook, deleteBook, addBook, getBooksDesc, getBooksAsc,
-                  getBestBooks, getSingleBook, connectUserToCart, getUserCart, updateCart, 
-                  deleteCart  }
+                  getBestBooks, getSingleBook, getUserCart, 
+                  addBooksToCart  }
 
