@@ -36,20 +36,20 @@ const LoggedCart = () => {
 
     fetchCartItems();
   }, []);
-  console.log(cartsItems)
+  
   return (
     <div>
-      <h2>Cart Items</h2>
+      <h2>Order Submitted</h2>
       <ul>
         {cartsItems.map((item) => (
-          <div key={item.id}>
-            <img src={item.cover} alt="book cover image" className='bookCheckoutImage' /> 
-            <div>{item.title}</div>
-            <div>Quantity: {item.quantity}</div>
-            <div> ${item.total_price}</div>
+          <div key={item.id} className='shoppingCartContainer'>
+            <img src={item.cover} alt= {`Cover image of ${item.title}`} className='checkoutCoverImg' /> 
+            <div className='itemTitle'>{item.title}</div>
+            <div className='quantityBar'>Quantity: {item.quantity}</div>
+            <div className='subtotal'> ${item.total_price}</div>
           </div>
         ))}
-            <div> <strong> Total Price: ${finalTotalPrice} </strong></div>
+            <div> <strong> Total ${finalTotalPrice} </strong></div>
       </ul>
 
     </div>

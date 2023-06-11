@@ -9,6 +9,7 @@ import shoppingLogo from "../images/shoppingcart.svg"
 import userLogo from "../images/userLogo.svg"
 import Logout from '../components/Logout'
 import LoggedCart from '../components/LoggedCart'
+import Checkout from './Checkout'
 
 
 
@@ -16,6 +17,7 @@ function Books() {
 
     const [books, setBooks] = useState([])
     const [bestBooks, setBestBooks] = useState([])
+    const [cartCounter, setCartCounter] = useState(0)
     const username = localStorage.getItem('username');
    
 
@@ -47,93 +49,155 @@ function Books() {
     }
 
     const [cartItems, setCartItems] = useState([]);
-    const addToCart = (bookId) => {
-      fetch(`http://localhost:8000/books/${bookId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          const book = data[0];
-          const existingItem = cartItems.find((item) => item.id === book.id);
-          if (existingItem) {
-            // If item already exists in the cart, update the quantity and totalPrice
-            const updatedItems = cartItems.map((item) => {
-              if (item.id === book.id) {
-                return { ...item, quantity: item.quantity + 1, totalPrice: (item.quantity + 1) * book.price };
-              }
-              return item;
-            });
-            setCartItems(updatedItems);
-            console.log(cartItems);
-          } else {
-            // If item doesn't exist in the cart, add it with quantity and totalPrice
-            const newItem = { ...book, quantity: 1, totalPrice: book.price };
-            setCartItems([...cartItems, newItem]);
-            console.log(cartItems);
-          }
+     
+    const totalBooks = () => {
+      let totalQuantity = 0;
+      cartItems.forEach((item) => {
+        totalQuantity += item.quantity;
+      });
     
-          // Check if the user is logged in
-          const token = localStorage.getItem('token');
-          if (token) {
-            const userId = localStorage.getItem('id');
-            const data = {
-              book_id: book.id,
-              quantity: 1,
-              total_price: book.price
-            };
-    
-            fetch(`http://localhost:8000/cartuser/${userId}/add`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-              body: JSON.stringify(data),
-            })
-              .then((response) => {
-                if (response.ok) {
-                  console.log('Item added to cart');
-                } else {
-                  console.error('Failed to add item to cart');
-                }
-              })
-              .catch((error) => {
-                console.error('Error adding item to cart:', error);
-              });
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching book price:', error);
-        });
+      setCartCounter(totalQuantity);
     };
     
-      
-      
+    
+    const addToCart = (bookId) => {
+        // Make a request to the server to fetch the price of the book
+        fetch(`http://localhost:8000/books/${bookId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const book = data[0];
+            const existingItem = cartItems.find((item) => item.id === book.id);
+            if (existingItem) {
+              // If item already exists in the cart, update the quantity and totalPrice
+              const updatedItems = cartItems.map((item) => {
+                if (item.id === book.id) {
+                  return { ...item, quantity: item.quantity + 1, totalPrice: (item.quantity + 1) * book.price };
+                }
+                return item;
+              });
+              setCartItems(updatedItems);
+       
+              
+            } else {
+              // If item doesn't exist in the cart, add it with quantity and totalPrice
+              const newItem = { ...book, quantity: 1, totalPrice: book.price };
+              setCartItems([...cartItems, newItem]);
+             
+              
+            }
+            setCartCounter(prevState => prevState +1)
+          })
+        
+          .catch((error) => {
+            console.error('Error fetching book price:', error);
+            // Handle error if price fetching fails
+          });
+          
+      };   
+       
       const removeCartItem = (itemId) => {
-        const updatedItems = cartItems.filter((item) => item.id !== itemId);
-        setCartItems(updatedItems);
+        const removedItem = cartItems.find((item) => item.id === itemId);
+        if (removedItem) {
+          const updatedItems = cartItems.filter((item) => item.id !== itemId);
+          setCartItems(updatedItems);
+          setCartCounter((prevState) => prevState - removedItem.quantity);
+        }
       };
+      
+      
       const updateQuantity = (itemId, newQuantity) => {
         const updatedItems = cartItems.map((item) => {
           if (item.id === itemId) {
-            return { ...item, quantity: newQuantity, totalPrice: newQuantity * item.price };
+            const quantityDifference = newQuantity - item.quantity;
+            return {
+              ...item,
+              quantity: newQuantity,
+              totalPrice: newQuantity * item.price,
+            };
           }
           return item;
         });
         setCartItems(updatedItems);
+      
+        const quantityDifference = newQuantity - cartItems.find((item) => item.id === itemId)?.quantity;
+        setCartCounter((prevState) => prevState + quantityDifference);
       };
+      
+
+    const checkOutFinal = () => {
+        if (!Array.isArray(cartItems)) {
+          console.error('cartItems is not an array');
+          return;
+        }
+        // Check if the user is logged in
+        const token = localStorage.getItem('token');
+        if (token) {
+          const userId = localStorage.getItem('id');
+      
+          // Create an array of items to be added to the cart
+          const itemsToAdd = cartItems.map((item) => ({
+            book_id: item.id,
+            quantity: item.quantity,
+            total_price: item.totalPrice,
+          }));
+        
+          // Make a POST request to add the items to the cart
+          fetch(`http://localhost:8000/cartuser/${userId}/add`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(itemsToAdd),
+          })
+            .then((response) => {
+              if (response.ok) {
+                console.log('Items added to cart');
+              } else {
+                console.error('Failed to add items to cart');
+              }
+            })
+            .catch((error) => {
+              console.error('Error adding items to cart:', error);
+            });
+        }
+      };
+      const [renderBooks, setRenderbooks] = useState(true);
+      const gotoCheck = () => {
+        setRenderbooks(false)
+      }
+      const gotoHome = () => {
+        setRenderbooks(true)
+      }
+      useEffect(() => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        setCartItems(cartItems);
+        totalBooks(cartItems); // Update cart counter
+      }, []);
+    
+      // Persist cartItems to localStorage when it changes
+      useEffect(() => {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      }, [cartItems]);
+
+    
   return (
     <div>
         <div className='titleHeader'>
-        <div> <h1 className='inventoryTittle'> Readers' Retreat </h1></div>
-        <div> 
+        <div> <h1 className='inventoryTittle' onClick={() => gotoHome()}> Readers' Retreat </h1></div>
+        <div className='headerIcons'> 
           {username}
           <Logout/>
-          <Link to="/login">
-            <img src={userLogo} alt="user account logo" className="shoppingCartLogo" />
+          <Link to="/login" className="cart-link">
+            <img src={userLogo} alt="user account logo" className="userLogo" />
+            {cartCounter > 0 && (
+              <span className="cart-counter" > {cartCounter}</span>
+            )}
           </Link>
-          <img src= {shoppingLogo} alt='shopping cart logo' className='shoppingCartLogo'/>  </div>
+          <img src= {shoppingLogo} alt='shopping cart logo' className='shoppingCartLogo' onClick={()=> gotoCheck()}/>  </div>
         </div>
         <div className='display'> 
-           
+          {renderBooks ? <> 
         <div className='bestsellingTitle'> <div className='bestsellingheader'>Best Sellers  </div>
             <div className='bestSelling'> 
             <BookCarousel bestBooks={ bestBooks} />
@@ -164,8 +228,10 @@ function Books() {
             ))
             }
             </div>
-            <Cart cartItems={cartItems} removeCartItem={removeCartItem} updateQuantity= {updateQuantity}  />
             <LoggedCart />
+            <button onClick={() => gotoCheck()}> Go to Checkout</button> </>
+            : <Checkout cartItems={cartItems} removeCartItem={removeCartItem} updateQuantity= {updateQuantity} checkOutFinal = {checkOutFinal}/> } 
+           
             <div className='addContainer'><button className='addBtn'> <Link to ="/add"> Add new Book </Link>  </button> </div>       
 
     </div>

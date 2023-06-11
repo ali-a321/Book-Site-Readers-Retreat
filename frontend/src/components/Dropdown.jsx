@@ -15,14 +15,12 @@
             }
         }
         fetchAllBooks()
-        console.log("fired")
         
     }, [])
 
     const handleOptionChange = (event) => {
         const value = event.target.value;
         setSelectedOption(value);
-        console.log(selectedOption)
         if(value == "priceLowToHigh"){
             fetchAscending()
 
@@ -39,7 +37,6 @@
         try {
         const res = await axios.get("http://localhost:8000/booksascending")
         setBooks(res.data)
-        console.log(res.data)
         
             } catch (error) {
             console.log(error)

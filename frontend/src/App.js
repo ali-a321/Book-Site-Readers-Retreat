@@ -5,6 +5,7 @@ import AddBook from "./pages/AddBook"
 import UpdateBook from "./pages/UpdateBook"
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Checkout from './pages/Checkout';
 
 function App() {
   return (

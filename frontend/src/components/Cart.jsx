@@ -1,35 +1,42 @@
 import React from 'react';
 import CartTotal from './CartTotal';
 
-const Cart = ({ cartItems, removeCartItem,updateQuantity }) => {
-    
-console.log(cartItems)
+const Cart = ({ cartItems,removeCartItem,updateQuantity, checkOutFinal }) => { 
 
   return (
-    <div>
-      <h2>Shopping Cart</h2>
+    <>
+    <h2>Your Shopping Cart</h2>
+    <div className='CartDisplay'>
+      <div> 
       {cartItems.map((item) => (
-        <div key={item.id}>
-          <p>{item.title}</p>
-          <p>Quantity: {item.quantity}</p>
+        <div key={item.id} className='shoppingCartContainer'>
+         <img src={item.cover} alt={`Cover image of ${item.title}`} className='checkoutCoverImg'/>
+          <div className='itemTitle'>{item.title}</div>
+       
+          <div> {item.price} </div>
+          <div className='quantityBar'> 
           <select
             value={item.quantity}
             onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-            >
+          >
             {Array.from({ length: 10 }, (_, index) => (
-                <option key={index + 1} value={index + 1}>
+              <option key={index + 1} value={index + 1}>
                 {index + 1}
-                </option>
-                ))}
+              </option>
+            ))}
           </select>
-          <p> {item.price} </p>
-          <p> ${parseFloat(item.price) * parseInt(item.quantity)}</p>
-        
-          <button onClick={() => removeCartItem(item.id)}>Remove</button>
+          </div>
+          <div> 
+            <div className='subtotal'> ${parseFloat(item.price) * parseInt(item.quantity)}</div>
+            <div onClick={() => removeCartItem(item.id)} className='removeBtnCart'>Remove</div>
+          </div>
         </div>
       ))}
-       <CartTotal cartItems={cartItems} />
+      
+      </div>
+      <CartTotal cartItems={cartItems} checkOutFinal={checkOutFinal} />
     </div>
+    </>
   );
 };
 

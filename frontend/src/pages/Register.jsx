@@ -29,31 +29,38 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+    <> 
+    <div className='titleHeader'>
+        <div> <h1 className='inventoryTittle' onClick={()=> navigate("/")} > Readers' Retreat </h1></div>
+        </div>
+    <div className="form-container">
+    <h2>Register</h2>
+    <form>
+      <label htmlFor="username">Username:</label>
+      <input
+        type="text"
+        id="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
 
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          minLength={4}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <label htmlFor="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        minLength={4}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <button type="button" onClick={handleRegister}>
-          Register
-        </button>
-      </form>
-    </div>
+      <button type="button" onClick={handleRegister}>
+        Register
+      </button>
+      <div onClick={()=> navigate("/login")}>Already have an account? Login </div>
+
+    </form>
+  </div>
+  </>
   );
 };
 

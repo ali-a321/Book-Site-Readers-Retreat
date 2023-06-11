@@ -8,7 +8,8 @@ function Login() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [loggedUser, setloggedUser] = useState('');
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+      e.preventDefault()
         try {
           const response = await fetch("http://localhost:8000/users/login", {
             method: 'POST',
@@ -58,34 +59,39 @@ function Login() {
           console.error('Error during login:', error);
         }
       };
-      
 
-  return (
-    <div>
-      <h2>Login</h2>
-      <form>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
 
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          minLength={4}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button type="submit" onClick={handleLogin}>
-          Login   was type = button 
-        </button>
-      </form>
-    </div>
+  return (<> 
+    <div className='titleHeader'>
+        <div> <h1 className='inventoryTittle' onClick={()=> navigate("/")} > Readers' Retreat </h1></div>
+        </div>
+    <div className="login-container">
+    <h2>Login</h2>
+    <form className="login-form" onSubmit={handleLogin}>
+      <label htmlFor="username">Username:</label>
+      <input
+        type="text"
+        id="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+  
+      <label htmlFor="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        minLength={4}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+  
+      <button type="submit" onClick={handleLogin}>
+        Login
+      </button>
+      <div onClick ={() => navigate("/register")}> Don't have an account? Register here </div>
+    </form>
+  </div>
+  </>
   )
 }
 
