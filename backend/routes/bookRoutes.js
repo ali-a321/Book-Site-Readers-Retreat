@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {getAllBooks, updateBook, deleteBook, addBook, getBooksDesc, getBooksAsc,
-    getBestBooks, getSingleBook, getUserCart, addBooksToCart} = require("../controllers/bookController")
+    getBestBooks, getSingleBook, getUserCart, addBooksToCart, getUserCartNow} = require("../controllers/bookController")
 const db = require('../db');
      
 //Middleware to attach db object to req object
@@ -29,5 +29,6 @@ router.delete('/books/:id', deleteBook)
 // User Cart
 router.post('/cartuser/:id/add', addBooksToCart);
 router.get('/cartuser/:id', getUserCart);
+router.get('/cartnow/:id', getUserCartNow);
 
 module.exports = router
