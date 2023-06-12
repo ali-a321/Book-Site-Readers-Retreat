@@ -92,7 +92,6 @@ function Homepage() {
         
           .catch((error) => {
             console.error('Error fetching book price:', error);
-            // Handle error if price fetching fails
           });
           
       };   
@@ -177,10 +176,10 @@ function Homepage() {
       useEffect(() => {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         setCartItems(cartItems);
-        totalBooks(cartItems); // Update cart counter
+        totalBooks(cartItems); 
       }, []);
     
-      // Persist cartItems to localStorage when it changes
+      //  cartItems to localStorage when it changes
       useEffect(() => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
       }, [cartItems]);
@@ -281,12 +280,7 @@ function Homepage() {
             : <Checkout cartItems={cartItems} removeCartItem={removeCartItem} updateQuantity= {updateQuantity} 
                 checkOutFinal = {checkOutFinal} gotoHome= {gotoHome}/> } 
            
-
-           
-
     </div>
-
-
     </div>
   )
 }
