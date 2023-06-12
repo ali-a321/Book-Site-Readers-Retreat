@@ -117,7 +117,7 @@ const addBooksToCart = async (req, res) => {
 };
 
 
-//GET, get logged user cart, /cartuser/:id
+//GET, get logged user cart today, /cartuser/:id
 
 const getUserCart = async (req, res) => {
   const userId = req.params.id;
@@ -125,16 +125,39 @@ const getUserCart = async (req, res) => {
     SELECT c.*, b.title, b.cover 
     FROM cart AS c
     JOIN books AS b ON c.book_id = b.id
-    WHERE c.user_id = ?`;
+    WHERE c.user_id = ?
+      AND DATE(c.created_at) = CURDATE()`;;
   const db = req.db;
-  console.log(db)
+
   db.query(sql, [userId], (err, results) => {
     if (err) {
       console.error('Error', err);
-     
+      res.status(500).json({ error: 'An error occurred while fetching the user cart.' });
     } else {
       console.log(results);
-      res.json(results)
+      res.json(results);
+    }
+  });
+};
+//GET, get logged user cart now, /cartnow/:id
+
+const getUserCartNow = async (req, res) => {
+  const userId = req.params.id;
+  const sql = `
+    SELECT c.*, b.title, b.cover 
+    FROM cart AS c
+    JOIN books AS b ON c.book_id = b.id
+    WHERE c.user_id = ?
+      AND c.created_at >= NOW() - INTERVAL 3 MINUTE`;
+  const db = req.db;
+
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error('Error', err);
+      res.status(500).json({ error: 'An error occurred while fetching the user cart.' });
+    } else {
+      console.log(results);
+      res.json(results);
     }
   });
 };
@@ -214,5 +237,5 @@ const getUserCart = async (req, res) => {
 
 module.exports = {getAllBooks, updateBook, deleteBook, addBook, getBooksDesc, getBooksAsc,
                   getBestBooks, getSingleBook, getUserCart, 
-                  addBooksToCart  }
+                  addBooksToCart,getUserCartNow  }
 
