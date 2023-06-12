@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
+const Register = ({setRenderRegister, showLogin}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
@@ -18,7 +16,7 @@ const Register = () => {
 
       if (response.ok) {
         console.log('Registration successful');
-        navigate('/login')
+        closeRegister()
         
       } else {
         console.error('Registration failed');
@@ -27,40 +25,40 @@ const Register = () => {
       console.error('Error registration:', error);
     }
   };
+  const closeRegister = () => {
+    setRenderRegister(false)
+    showLogin()
+  }  
 
   return (
-    <> 
-    <div className='titleHeader'>
-        <div> <h1 className='inventoryTittle' onClick={()=> navigate("/")} > Readers' Retreat </h1></div>
-        </div>
-    <div className="form-container">
-    <h2>Register</h2>
-    <form>
-      <label htmlFor="username">Username:</label>
-      <input
-        type="text"
-        id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+    <>
+      <div className="register-container">
+        <h2>Register</h2>
+        <form className="register-form">
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-      <label htmlFor="password">Password:</label>
-      <input
-        type="password"
-        id="password"
-        minLength={4}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            minLength={4}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-      <button type="button" onClick={handleRegister}>
-        Register
-      </button>
-      <div onClick={()=> navigate("/login")}>Already have an account? Login </div>
-
-    </form>
-  </div>
-  </>
+          <button type="button" onClick={handleRegister}>
+            Register
+          </button>
+          <div onClick={() => closeRegister()}>Already have an account? Login</div>
+        </form>
+      </div>
+    </>
   );
 };
 

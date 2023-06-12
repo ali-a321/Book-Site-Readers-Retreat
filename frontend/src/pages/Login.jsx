@@ -2,8 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-
-function Login() {
+function Login({setRenderLogin, setRenderRegister} ) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -50,7 +49,7 @@ function Login() {
               console.error('Error retrieving user details:', error);
             }
       
-            navigate('/');
+            setRenderLogin(false)
           } else {
             // Login failed
             console.error('Login failed');
@@ -60,38 +59,42 @@ function Login() {
         }
       };
 
+  
+      const showRegister = () => {
+        setRenderRegister(true)
+        setRenderLogin(false)
+      }
+  return (
+        <>
+     
+        <div className="login-container">
+          <h2>Login</h2>
+          <form className="login-form" onSubmit={handleLogin}>
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
 
-  return (<> 
-    <div className='titleHeader'>
-        <div> <h1 className='inventoryTittle' onClick={()=> navigate("/")} > Readers' Retreat </h1></div>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              minLength={4}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button type="submit" onClick={handleLogin}>
+              Login
+            </button>
+            <div onClick={() => showRegister()}>Don't have an account? Register here</div>
+          </form>
         </div>
-    <div className="login-container">
-    <h2>Login</h2>
-    <form className="login-form" onSubmit={handleLogin}>
-      <label htmlFor="username">Username:</label>
-      <input
-        type="text"
-        id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-  
-      <label htmlFor="password">Password:</label>
-      <input
-        type="password"
-        id="password"
-        minLength={4}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-  
-      <button type="submit" onClick={handleLogin}>
-        Login
-      </button>
-      <div onClick ={() => navigate("/register")}> Don't have an account? Register here </div>
-    </form>
-  </div>
-  </>
+        
+    </>
   )
 }
 

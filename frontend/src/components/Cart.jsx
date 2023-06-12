@@ -1,11 +1,11 @@
 import React from 'react';
 import CartTotal from './CartTotal';
 
-const Cart = ({ cartItems,removeCartItem,updateQuantity, checkOutFinal }) => { 
+const Cart = ({ cartItems,removeCartItem,updateQuantity, checkOutFinal, gotoHome }) => { 
 
   return (
     <>
-    <h2>Your Shopping Cart</h2>
+    <div className='yourShoppingCartTitle'> <h2>Your Shopping Cart</h2> </div>
     <div className='CartDisplay'>
       <div> 
       {cartItems.map((item) => (
@@ -34,7 +34,7 @@ const Cart = ({ cartItems,removeCartItem,updateQuantity, checkOutFinal }) => {
       ))}
       
       </div>
-      <CartTotal cartItems={cartItems} checkOutFinal={checkOutFinal} />
+      <CartTotal cartItems={cartItems} checkOutFinal={checkOutFinal} gotoHome= {gotoHome} />
     </div>
     </>
   );
