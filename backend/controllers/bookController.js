@@ -19,15 +19,16 @@ const getSingleBook = async (req,res) => {
     return res.json(data)
     })
 }
-//GET book above 19 points, /booksbest
-const getBestBooks = async (req,res) => {
-    const q = 'SELECT * FROM books WHERE points >= 20';
-    const db = req.db;
-    db.query(q, (err, data) => {
-    if(err) return res.json(err)
-    return res.json(data)
-    })
-}
+//GET top 5 book , /booksbest
+const getBestBooks = async (req, res) => {
+  const q = 'SELECT * FROM books ORDER BY points DESC LIMIT 5';
+  const db = req.db;
+  db.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+};
+
 
 //GET books filtered, /booksascending
 const getBooksAsc = async (req,res) => {
