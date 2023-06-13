@@ -182,6 +182,24 @@
 }
 
 /* Display books */
+.popup {
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  background-color: #4caf50;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.popupText {
+  margin-right: 8px;
+}
+
+.checkmark {
+  font-size: 16px;
+}
 .display{
   margin-bottom: 2rem;
   display: flex;
@@ -340,6 +358,16 @@ a{
 .shoppingCartContainer{
   display: flex;
   margin-bottom: 2rem;
+  
+}
+@media (max-width: 600px) {
+  .shoppingCartContainer{
+    flex-direction: column;
+  }
+  .CartDisplay{
+    flex-direction: column;
+    align-items: center;
+  }
 }
 .removeBtnCart{
   width: 6rem;
@@ -408,6 +436,11 @@ a{
 }
 
 /*Login & Register */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+}
 .registerPopup-container{
   display: none;
   position: fixed;

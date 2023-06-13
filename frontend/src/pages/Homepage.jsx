@@ -19,6 +19,8 @@ function Homepage() {
     const [books, setBooks] = useState([])
     const [bestBooks, setBestBooks] = useState([])
     const [cartCounter, setCartCounter] = useState(0)
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
     const username = localStorage.getItem('username');
    
     const navigate = useNavigate();
@@ -61,8 +63,21 @@ function Homepage() {
       setCartCounter(totalQuantity);
     };
     
+    const handleAddToCart = (e) => {
+      const buttonRect = e.target.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      setPopupPosition({
+        top: buttonRect.top + scrollTop - buttonRect.height -25,
+        left: buttonRect.left + buttonRect.width -100 ,
+        height: e.target.offsetHeight,
+      });
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+      }, 1000); 
+    };
     
-    const addToCart = (bookId) => {
+    const addToCart = (bookId, e) => {
         // Make a request to the server to fetch the price of the book
         fetch(`http://localhost:8000/books/${bookId}`)
           .then((response) => response.json())
@@ -88,6 +103,9 @@ function Homepage() {
               
             }
             setCartCounter(prevState => prevState +1)
+            localStorage.setItem('cartItems', JSON.stringify(cartItems))
+            
+            handleAddToCart(e)
           })
         
           .catch((error) => {
@@ -102,7 +120,10 @@ function Homepage() {
           const updatedItems = cartItems.filter((item) => item.id !== itemId);
           setCartItems(updatedItems);
           setCartCounter((prevState) => prevState - removedItem.quantity);
+          localStorage.setItem('cartItems', JSON.stringify(cartItems))
+
         }
+        
       };
       
       
@@ -122,6 +143,8 @@ function Homepage() {
       
         const quantityDifference = newQuantity - cartItems.find((item) => item.id === itemId)?.quantity;
         setCartCounter((prevState) => prevState + quantityDifference);
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems))
+
       };
       
 
@@ -174,7 +197,7 @@ function Homepage() {
         setRenderbooks(true)
       }
       useEffect(() => {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
         setCartItems(cartItems);
         totalBooks(cartItems); 
       }, []);
@@ -201,6 +224,7 @@ function Homepage() {
       
       const showLogin = () => {
         setRenderLogin(true)
+        
       }
     
       const handleLogout = () => {
@@ -219,15 +243,15 @@ function Homepage() {
         <div className='headerIcons'> 
           {username}
    
-          <div className="cart-link" onClick={() => showLogin()}>
+          <div className="cart-link" >
           
           {username ? (
             <img src={logoutLogo} alt="logout button" className="userLogo" onClick={()=> handleLogout()}/>
           ) : (
-            <img src={userLogo} alt="user account logo" className="userLogo" />
+            <img src={userLogo} alt="user account logo" className="userLogo" onClick={() => showLogin()} />
           )}
             {cartCounter > 0 && (
-              <span className="cart-counter" > {cartCounter}</span>
+              <span className="cart-counter"  onClick={()=> gotoCheck()}> {cartCounter}</span>
             )}
           </div>
           <img src= {shoppingLogo} alt='shopping cart logo' className='shoppingCartLogo' onClick={()=> gotoCheck()}/>  </div>
@@ -266,7 +290,19 @@ function Homepage() {
                   <div className='bookPrice'> 
                       ${item.price}
                   </div>
-                  <button onClick={() => addToCart(item.id)}>Add to Cart</button>
+                  <button onClick={(e) => addToCart(item.id, e)}>Add to Cart</button>
+                  {showPopup && (
+                    <div
+                      className="popup"
+                      style={{
+                        top: popupPosition.top,
+                        left: popupPosition.left,
+                      }}
+                    >
+                      <span className="popupText">Added to cart</span>
+                      <span className="checkmark">&#10003;</span>
+                    </div>
+                  )}
                   <button className='deleteBtn' onClick={() => handleDelete(item.id)}> Delete </button>
                   <button className='updateBtn' > <Link to= {`/update/${item.id}`}> Update </Link>  </button>
               </div> 
@@ -278,7 +314,7 @@ function Homepage() {
               <div className='addContainer'><button className='addBtn'> <Link to ="/add"> Add new Book </Link>  </button> </div>       
          </>
             : <Checkout cartItems={cartItems} removeCartItem={removeCartItem} updateQuantity= {updateQuantity} 
-                checkOutFinal = {checkOutFinal} gotoHome= {gotoHome}/> } 
+                checkOutFinal = {checkOutFinal} gotoHome= {gotoHome} showLogin={showLogin}/> } 
            
     </div>
     </div>

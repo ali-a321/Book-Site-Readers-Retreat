@@ -1,7 +1,7 @@
 import React from 'react';
 import CartTotal from './CartTotal';
 
-const Cart = ({ cartItems,removeCartItem,updateQuantity, checkOutFinal, gotoHome }) => { 
+const Cart = ({ cartItems,removeCartItem,updateQuantity, checkOutFinal, gotoHome, showLogin }) => { 
 
   return (
     <>
@@ -34,7 +34,7 @@ const Cart = ({ cartItems,removeCartItem,updateQuantity, checkOutFinal, gotoHome
       ))}
       
       </div>
-      <CartTotal cartItems={cartItems} checkOutFinal={checkOutFinal} gotoHome= {gotoHome} />
+      <CartTotal cartItems={cartItems} checkOutFinal={checkOutFinal} gotoHome= {gotoHome}showLogin={showLogin}/>
     </div>
     </>
   );
