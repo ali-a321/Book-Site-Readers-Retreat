@@ -147,12 +147,12 @@ function Homepage() {
 
       };
       
-
-    const checkOutFinal = () => {
+      const checkOutFinal = async () => {
         if (!Array.isArray(cartItems)) {
           console.error('cartItems is not an array');
           return;
         }
+        
         // Check if the user is logged in
         const token = localStorage.getItem('token');
         if (token) {
@@ -161,32 +161,53 @@ function Homepage() {
           // Create an array of items to be added to the cart
           const itemsToAdd = cartItems.map((item) => ({
             book_id: item.id,
+            cover: item.cover,
+            price: item.price,
             quantity: item.quantity,
             total_price: item.totalPrice,
           }));
-        
-          // Make a POST request to add the items to the cart
-          fetch(`http://localhost:8000/cartuser/${userId}/add`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify(itemsToAdd),
-          })
-            .then((response) => {
-              if (response.ok) {
-                console.log('Items added to cart');
-                navigate("/orderconfirmation")
-              } else {
-                console.error('Failed to add items to cart');
-              }
-            })
-            .catch((error) => {
-              console.error('Error adding items to cart:', error);
+          const finalTotalPrice = itemsToAdd.reduce((total, item) => total + item.total_price, 0);
+          try {
+            // Make a POST request to add the items to the cart
+            const cartResponse = await fetch(`http://localhost:8000/cartuser/${userId}/add`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+              body: JSON.stringify(itemsToAdd),
             });
+      
+            if (cartResponse.ok) {
+              console.log('Items added to cart');
+      
+              // Make a POST request to send the email
+              const emailResponse = await fetch('http://localhost:8000/sendemail', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: userId, orderDetails: itemsToAdd, final:finalTotalPrice }),
+              });
+      
+              if (emailResponse.ok) {
+                console.log('Email sent');
+                const emailData = await emailResponse.json();
+              } else {
+                console.error('Failed to send email');
+                throw new Error('Failed to send email');
+              }
+      
+              navigate('/orderconfirmation');
+            } else {
+              console.error('Failed to add items to cart');
+            }
+          } catch (error) {
+            console.error('Error adding items to cart or sending email:', error);
+          }
         }
       };
+      
       const [renderBooks, setRenderbooks] = useState(true);
      
 

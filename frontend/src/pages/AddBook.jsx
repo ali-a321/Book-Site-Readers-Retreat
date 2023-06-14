@@ -7,6 +7,7 @@ import ImageUpload from '../components/ImageUpload';
 function AddBook() {
   const [bookInfo, setBookInfo] = useState({
     title: '',
+    author: '',
     description: '',
     cover: "",
     price: null,
@@ -40,6 +41,7 @@ function AddBook() {
       console.log(coverUrl)
       const book = {
         title: bookInfo.title,
+        author: bookInfo.author,
         description: bookInfo.description,
         cover: coverUrl,
         price: bookInfo.price,
@@ -51,6 +53,7 @@ function AddBook() {
   
       setBookInfo({
         title: "",
+        author: "",
         description: "",
         cover: "",
         price: null,
@@ -86,6 +89,18 @@ function AddBook() {
                   required
                   onChange={onChangeBookInfo}
                   placeholder="Book title"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="author"
+                  name="author"
+                  required
+                  onChange={onChangeBookInfo}
+                  placeholder="Book Author"
                   autoComplete="off"
                 />
               </div>

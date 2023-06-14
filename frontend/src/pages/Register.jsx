@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const Register = ({ setRenderRegister, showLogin }) => {
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -16,7 +17,7 @@ const Register = ({ setRenderRegister, showLogin }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, email , password }),
       });
 
       if (response.ok) {
@@ -36,6 +37,7 @@ const Register = ({ setRenderRegister, showLogin }) => {
   const closeRegister = () => {
     setRenderRegister(false);
     showLogin();
+    setEmail('');
     setUsername('');
     setPassword('');
     setErrorMessage('');
@@ -46,6 +48,13 @@ const Register = ({ setRenderRegister, showLogin }) => {
       <div className="register-container">
         <h2>Register</h2>
         <form className="register-form">
+        <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <label htmlFor="username">Username:</label>
           <input
             type="text"
