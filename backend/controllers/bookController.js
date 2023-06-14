@@ -102,7 +102,7 @@ const addBooksToCart = async (req, res) => {
 
       if (!book_id || !quantity || !total_price) {
         console.error('Invalid cart item data:', item);
-        continue; // Skip this item and proceed to the next one
+        continue; // Skip this item go to the next one
       }        
       const sql =
        'INSERT INTO cart (user_id, book_id, quantity, total_price) VALUES (?, ?, ?, ?)';

@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const sendEmail = require("../controllers/emailController")
 const db = require('../db');
-const verifyToken  = require("../middleware/userAuth")
 
 //Middleware to attach db object to req object
 const attachDb = (req, res, next) => {

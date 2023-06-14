@@ -10,7 +10,6 @@ const createUser = async (req, res) => {
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      // Insert the user into the database
       const query = 'INSERT INTO users (username,email, password) VALUES (?, ?, ?)';
       db.query(query, [username, email, hashedPassword], (error, result) => {
         if (error) {
