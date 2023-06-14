@@ -38,6 +38,7 @@ const sendEmail = async (req, res) => {
                   <img src="${item.cover}" alt="Book Cover" style="width: 100px; height: 150px;">
                 </div>
                 <div style="margin-left: 20px;">
+                  <p>Book: ${item.title}</p>
                   <p>Quantity: ${item.quantity}</p>
                   <p>Price: $${item.price}</p>
                   <p>Total Price: $${item.total_price}</p>

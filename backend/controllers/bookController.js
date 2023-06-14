@@ -124,7 +124,7 @@ const addBooksToCart = async (req, res) => {
 const getUserCart = async (req, res) => {
   const userId = req.params.id;
   const sql = `
-    SELECT c.*, b.title, b.cover b.author
+    SELECT c.*, b.title, b.cover, b.author
     FROM cart AS c
     JOIN books AS b ON c.book_id = b.id
     WHERE c.user_id = ?
