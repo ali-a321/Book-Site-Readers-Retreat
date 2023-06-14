@@ -5,8 +5,8 @@ const OrderConfirmation = () => {
   const [cartsItems, setCartsItems] = useState([]);
   const [finalTotalPrice, setFinalTotalPrice] = useState(0);
   const navigate  = useNavigate()
+ 
   useEffect(() => {
-    // Function to fetch cart items for logged-in user
     const fetchCartItems = async () => {
       try {
         const token = localStorage.getItem('token');

@@ -111,7 +111,7 @@
   line-height: 1;
 }
 
-/* Carousel dots (optional) */
+/* Carousel dots */
 .slick-dots li button:before {
   color: #000;
 }

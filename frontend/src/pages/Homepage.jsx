@@ -11,9 +11,6 @@ import Login from './Login'
 import Register from './Register'
 import logoutLogo from "../images/logoutLogo.svg"
 
-
-
-
 function Homepage() {
 
     const [books, setBooks] = useState([])
@@ -22,8 +19,8 @@ function Homepage() {
     const [showPopup, setShowPopup] = useState(false);
     const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
     const username = localStorage.getItem('username');
-   
     const navigate = useNavigate();
+    const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
         const fetchBestBooks = async () => {
@@ -39,7 +36,6 @@ function Homepage() {
         
     }, [])
 
-   
     const handleDelete = async (bookid) => {
         try {
            await axios.delete(`http://localhost:8000/books/${bookid}`)
@@ -51,8 +47,6 @@ function Homepage() {
         }
         
     }
-
-    const [cartItems, setCartItems] = useState([]);
      
     const totalBooks = () => {
       let totalQuantity = 0;
@@ -78,7 +72,6 @@ function Homepage() {
     };
     
     const addToCart = (bookId, e) => {
-        // Make a request to the server to fetch the price of the book
         fetch(`http://localhost:8000/books/${bookId}`)
           .then((response) => response.json())
           .then((data) => {
@@ -99,12 +92,10 @@ function Homepage() {
               // If item doesn't exist in the cart, add it with quantity and totalPrice
               const newItem = { ...book, quantity: 1, totalPrice: book.price };
               setCartItems([...cartItems, newItem]);
-             
               
             }
             setCartCounter(prevState => prevState +1)
             localStorage.setItem('cartItems', JSON.stringify(cartItems))
-            
             handleAddToCart(e)
           })
         
@@ -125,7 +116,6 @@ function Homepage() {
         }
         
       };
-      
       
       const updateQuantity = (itemId, newQuantity) => {
         const updatedItems = cartItems.map((item) => {
@@ -153,7 +143,6 @@ function Homepage() {
           return;
         }
         
-        // Check if the user is logged in
         const token = localStorage.getItem('token');
         if (token) {
           const userId = localStorage.getItem('id');
@@ -168,7 +157,6 @@ function Homepage() {
           }));
           const finalTotalPrice = itemsToAdd.reduce((total, item) => total + item.total_price, 0);
           try {
-            // Make a POST request to add the items to the cart
             const cartResponse = await fetch(`http://localhost:8000/cartuser/${userId}/add`, {
               method: 'POST',
               headers: {
@@ -181,7 +169,6 @@ function Homepage() {
             if (cartResponse.ok) {
               console.log('Items added to cart');
       
-              // Make a POST request to send the email
               const emailResponse = await fetch('http://localhost:8000/sendemail', {
                 method: 'POST',
                 headers: {
@@ -192,7 +179,7 @@ function Homepage() {
       
               if (emailResponse.ok) {
                 console.log('Email sent');
-                const emailData = await emailResponse.json();
+             
               } else {
                 console.error('Failed to send email');
                 throw new Error('Failed to send email');
@@ -209,8 +196,7 @@ function Homepage() {
       };
       
       const [renderBooks, setRenderbooks] = useState(true);
-     
-
+    
       const gotoCheck = () => {
         setRenderbooks(false)
       }
@@ -223,12 +209,10 @@ function Homepage() {
         totalBooks(cartItems); 
       }, []);
     
-      //  cartItems to localStorage when it changes
       useEffect(() => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
       }, [cartItems]);
     
-
       const [renderLogin, setRenderLogin] = useState(false);
       const [renderRegister, setRenderRegister] = useState(false);
 
