@@ -50,9 +50,9 @@ const getBooksDesc = async (req,res) => {
 }
 //Add book, POST, /books
 const addBook = async (req,res) => {
-    const q = "INSERT INTO books (`title`, `description`, `cover`, `price`, `points`) VALUES (?)"
+    const q = "INSERT INTO books (`title`, `author`, `description`, `cover`, `price`, `points`) VALUES (?)"
     const db = req.db;
-    const values = [ req.body.title, req.body.description, req.body.cover, req.body.price, req.body.points]
+    const values = [ req.body.title, req.body.author, req.body.description, req.body.cover, req.body.price, req.body.points]
     db.query(q, [values], (err, data) => {
         if(err) return res.json(err)
         return res.json("Book has been created")
@@ -69,19 +69,20 @@ const deleteBook = async (req, res) => {
     })
 }
 
-//UPDATE book, /books/:id
+//PUT UPDATE book, /books/:id
 const updateBook = async (req, res) => {
-    const bookId = req.params.id;
-    const db = req.db;
-    const q = "UPDATE books SET `title`= ?, `description`= ?, `cover`= ?, `price`= ?, `points` WHERE id = ?";
-  
-    const values = [ req.body.title, req.body.description, req.body.cover, req.body.price, req.body.points]
+  const bookId = req.params.id;
+  const db = req.db;
+  const q = "UPDATE books SET `title`= ?, `author`= ?, `description`= ?, `cover`= ?, `price`= ?, `points` = ? WHERE id = ?";
 
-    db.query(q, [...values,bookId], (err, data) => {
-      if (err) return res.send(err);
-      return res.json(data);
-    });
-}
+  const values = [req.body.title, req.body.author, req.body.description, req.body.cover, req.body.price, req.body.points];
+
+  db.query(q, [...values, bookId], (err, data) => {
+    if (err) return res.send(err);
+    return res.json(data);
+  });
+};
+
 
 //POST, checkout for multiple books, /cartuser/:id/add
 
@@ -123,7 +124,7 @@ const addBooksToCart = async (req, res) => {
 const getUserCart = async (req, res) => {
   const userId = req.params.id;
   const sql = `
-    SELECT c.*, b.title, b.cover 
+    SELECT c.*, b.title, b.cover b.author
     FROM cart AS c
     JOIN books AS b ON c.book_id = b.id
     WHERE c.user_id = ?
@@ -145,11 +146,11 @@ const getUserCart = async (req, res) => {
 const getUserCartNow = async (req, res) => {
   const userId = req.params.id;
   const sql = `
-    SELECT c.*, b.title, b.cover 
+    SELECT c.*, b.title, b.cover, b.price, b.author
     FROM cart AS c
     JOIN books AS b ON c.book_id = b.id
     WHERE c.user_id = ?
-      AND c.created_at >= NOW() - INTERVAL 3 MINUTE`;
+      AND c.created_at >= NOW() - INTERVAL 1 MINUTE`;
   const db = req.db;
 
   db.query(sql, [userId], (err, results) => {

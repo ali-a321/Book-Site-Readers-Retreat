@@ -5,14 +5,14 @@ const db = require('../db');
 //REGISTER, POST, /users
 const createUser = async (req, res) => {
     try {
-      const { username, password } = req.body;
+      const { username, email ,password } = req.body;
   
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
   
       // Insert the user into the database
-      const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-      db.query(query, [username, hashedPassword], (error, result) => {
+      const query = 'INSERT INTO users (username,email, password) VALUES (?, ?, ?)';
+      db.query(query, [username, email, hashedPassword], (error, result) => {
         if (error) {
           console.error('Error registering user:', error);
           return res.status(500).json({ message: 'Failed to register user' });
@@ -63,10 +63,10 @@ const loginUser = async (req, res) => {
 
   //GET, /user
   const getUser = (req, res) => {
-    const { username, id } = req;
+    const { username, email, id } = req;
     console.log(username);
     console.log(id);
-    res.json({ username, id });
+    res.json({ username, id, email });
   };
 
 module.exports = { createUser, loginUser, getUser}
