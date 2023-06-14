@@ -150,6 +150,7 @@ function Homepage() {
           // Create an array of items to be added to the cart
           const itemsToAdd = cartItems.map((item) => ({
             book_id: item.id,
+            title: item.title,
             cover: item.cover,
             price: item.price,
             quantity: item.quantity,
@@ -287,6 +288,9 @@ function Homepage() {
                   </div>
                   <div className='bookTitle'> 
                     <strong> {item.title} </strong>
+                  </div>
+                  <div className='bookAuthor'> 
+                    <strong> by {item.author} </strong>
                   </div>
                   <div className='bookDescription'> 
                       {item.description}

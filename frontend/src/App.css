@@ -1,13 +1,20 @@
 .App {
  margin: 0;
  padding: 0;
-
+ width: 100%;
 }
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+ 
+ }
 .titleHeader{
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid lightgray;
+  width: 100%;
 }
 
 .cart-link {
@@ -95,18 +102,45 @@
 .bookDescriptions:hover{
   overflow-y: auto;
 }
+
 .bookTitles{
   display: flex;
   align-items: center;
   justify-content: center;
- 
+}
+.bookAuthor{
+  font-size: 90%;
 }
 /* Navigation arrows */
-.slick-prev, .slick-next{
+.slick-prev,
+.slick-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
 }
+
+.slick-prev {
+  left: 22px!important;
+}
+
+.slick-next {
+  right: -15px!important;
+}
+
 .slick-prev:before,
 .slick-next:before {
-  color: #000!important;
+  color: #000 !important;
   font-size: 24px;
   line-height: 1;
 }
@@ -115,8 +149,31 @@
 .slick-dots li button:before {
   color: #000;
 }
-
 /* Add Book */
+.dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dropzone.active {
+  border-color: #00ccff;
+}
+
+.dropzone p {
+  margin: 0;
+  font-size: 16px;
+  color: #999;
+}
+
+.dropzone{
+  display: block;
+  max-width: 86%;
+  height: auto;
+  margin-top: 10px;
+}
+
 .chosenImg{
   width: 150px;
   height: 200px;
@@ -208,7 +265,8 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-left: 1rem;
+ 
+  width: 100%;
 
 }
 .addContainer{
@@ -260,9 +318,7 @@
 .sortbox:focus {
   box-shadow: 0 0 0 2px #007bff;
 }
-.display{
 
-}
 .dropdownMenu{
   display: flex;
   justify-content: flex-end;
@@ -362,15 +418,7 @@ a{
   margin-bottom: 2rem;
   
 }
-@media (max-width: 600px) {
-  .shoppingCartContainer{
-    flex-direction: column;
-  }
-  .CartDisplay{
-    flex-direction: column;
-    align-items: center;
-  }
-}
+
 .removeBtnCart{
   width: 6rem;
   cursor: pointer;
@@ -558,3 +606,36 @@ a{
   background-color: #45a049;
 }
 
+
+
+/*MOBILE */
+@media (max-width: 600px) {
+  .shoppingCartContainer{
+    flex-direction: column;
+  }
+  .CartDisplay{
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3.5rem;
+  }
+  .bookDescriptions{
+    display: none;
+  }
+ 
+  .bookContainer{
+    margin-left: 0rem;
+    margin-right: 0rem;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  .quantityBar{
+    margin-left: 0rem;
+  }
+  .display{
+    margin-bottom: 6rem;
+  }
+  .ordersSubmittedContainer{
+    margin-bottom: 2rem;
+  }
+
+}

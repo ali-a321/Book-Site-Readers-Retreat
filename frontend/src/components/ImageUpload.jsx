@@ -21,7 +21,7 @@ const ImageUpload = ({ onChange }) => {
           <img src={URL.createObjectURL(selectedFile)} alt="Selected" className="chosenImg" />
         </div>
       ) : (
-        <p>Drag and drop an image file here or click to select a file.</p>
+        <p>Drag and drop an image file here or click to select the image.</p>
       )}
     </div>
   );
