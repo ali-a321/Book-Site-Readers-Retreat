@@ -12,7 +12,6 @@ const sendEmail = async (req, res) => {
     db.query('SELECT * FROM users WHERE id = ?', [id], (err, result) => {
       if (err) {
         console.error(err);
-        // Handle the error and send an appropriate response
         res.status(500).json({ error: 'Error retrieving user information' });
       } else {
         if (result.length > 0) {
@@ -53,23 +52,19 @@ const sendEmail = async (req, res) => {
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
               console.error(error);
-              // Handle the error and send an appropriate response
               res.status(500).json({ error: 'Error sending email' });
             } else {
               console.log('Email sent: ' + info.response);
-              // Send a success response
               res.json({ message: 'Email sent successfully' });
             }
           });
         } else {
-          // Handle the case when user not found
           res.status(404).json({ error: 'User not found' });
         }
       }
     });
   } catch (error) {
     console.error(error);
-    // Handle any other errors and send an appropriate response
     res.status(500).json({ error: 'An error occurred' });
   }
 };
