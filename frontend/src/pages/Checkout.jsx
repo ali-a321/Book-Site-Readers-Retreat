@@ -2,7 +2,7 @@ import React from 'react';
 import LoggedCartToday from './LoggedCartToday';
 import Cart from '../components/Cart';
 
-function Checkout({ cartItems, removeCartItem, updateQuantity, checkOutFinal, gotoHome, showLogin }) {
+function Checkout({ cartItems, removeCartItem, updateQuantity, checkOutFinal, gotoHome, showLogin, loading }) {
 
   const token = localStorage.getItem('token');
   
@@ -15,6 +15,7 @@ function Checkout({ cartItems, removeCartItem, updateQuantity, checkOutFinal, go
         checkOutFinal={checkOutFinal}
         gotoHome={gotoHome}
         showLogin={showLogin}
+        loading = {loading}
       />
       {token && <LoggedCartToday />}
     </div>

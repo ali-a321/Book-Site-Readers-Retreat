@@ -21,6 +21,7 @@ function Homepage() {
     const username = localStorage.getItem('username');
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchBestBooks = async () => {
@@ -138,6 +139,7 @@ function Homepage() {
       };
       
       const checkOutFinal = async () => {
+        setLoading(true)
         if (!Array.isArray(cartItems)) {
           console.error('cartItems is not an array');
           return;
@@ -194,6 +196,7 @@ function Homepage() {
             console.error('Error adding items to cart or sending email:', error);
           }
         }
+        setLoading(false)
       };
       
       const [renderBooks, setRenderbooks] = useState(true);
@@ -323,7 +326,7 @@ function Homepage() {
               <div className='addContainer'><button className='addBtn'> <Link to ="/add"> Add new Book </Link>  </button> </div>       
          </>
             : <Checkout cartItems={cartItems} removeCartItem={removeCartItem} updateQuantity= {updateQuantity} 
-                checkOutFinal = {checkOutFinal} gotoHome= {gotoHome} showLogin={showLogin}/> } 
+                checkOutFinal = {checkOutFinal} gotoHome= {gotoHome} showLogin={showLogin} loading = {loading}/> } 
            
     </div>
     </div>

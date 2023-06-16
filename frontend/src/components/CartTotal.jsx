@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const CartTotal = ({ cartItems, checkOutFinal, gotoHome, showLogin }) => {
+const CartTotal = ({ cartItems, checkOutFinal, gotoHome, showLogin,loading }) => {
   const [cartFinal, setCartFinal] = useState(0);
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -50,13 +50,19 @@ const CartTotal = ({ cartItems, checkOutFinal, gotoHome, showLogin }) => {
       {cartFinal > 0 ? (
         loggedIn ? (
           <div className="finalCheckoutContainer">
-            <button onClick={checkOutFinal} className="finalCheckout">Checkout</button>
+            <button onClick={checkOutFinal} className="finalCheckout">
+              {loading ? 'Confirming...' : 'Checkout'}
+            </button>
           </div>
         ) : (
-          <div onClick={() => showLogin()} className="finalCheckout">Login</div>
+          <div onClick={() => showLogin()} className="finalCheckout">
+            Login
+          </div>
         )
       ) : (
-        <div onClick={() => gotoHome()} className="finalCheckout">Continue Shopping</div>
+        <div onClick={() => gotoHome()} className="finalCheckout">
+          Continue Shopping
+        </div>
       )}
     </div>
   );
