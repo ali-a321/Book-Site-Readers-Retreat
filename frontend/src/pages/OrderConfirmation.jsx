@@ -54,7 +54,7 @@ const OrderConfirmation = () => {
         ))}
             <div className='totalOrderPrice'> <strong> Total ${finalTotalPrice} </strong></div>
       </div>
-
+      <div className='continueCheckout' onClick ={() => navigate("/")}> Continue </div>
     </div>
     </>
   );
