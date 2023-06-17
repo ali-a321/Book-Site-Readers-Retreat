@@ -165,7 +165,7 @@ function AddBook() {
               </button>
               <br></br>
               {error && <div>Something went wrong!</div>}
-              <Link to="/">Back</Link>
+              <div className='goBack'> <Link to="/">Back</Link>  </div>
             </div>
           </form>
         </section>
