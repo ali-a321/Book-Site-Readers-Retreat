@@ -364,20 +364,27 @@
   width: 100%;
 
 }
+.btnContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .deleteBtn{
-  margin: 10px;
   padding: 3px 6px;
   background-color: rgb(237, 98, 98);
   cursor: pointer;
   border: none;
   color: white ;
+  margin-bottom: 1rem;
 }
 .updateBtn{
   border: none;
+  margin: 10px;
   padding: 3px 6px;
   background-color: lightgreen;
   cursor: pointer;
-  margin-bottom: 1rem;
+  
   text-decoration: none;
 }
 .inventoryTittle{
@@ -673,6 +680,16 @@ a{
   }
   .form-container{
     margin-bottom: 5rem;
+  }
+  .btnContainer{
+    margin-top: 1rem;
+    flex-direction: row;
+  }
+  .updateBtn{
+   margin-right: 2rem;
+  }
+  .deleteBtn{
+    margin-bottom: 0rem;
   }
 
 }
