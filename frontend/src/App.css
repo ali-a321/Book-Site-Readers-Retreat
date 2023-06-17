@@ -484,6 +484,23 @@ a{
   background-color: #222;
   color: whitesmoke;
 }
+.continueCheckout{
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 0;
+  text-transform: inherit;
+  letter-spacing: 1.05px;
+  font-family: "Gibson Regular","Helvetica, Arial, Verdana",sans-serif;
+  font-size: 20px;
+  line-height: 26px;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  width: 7rem;
+  cursor: pointer;
+  background-color: #222;
+  color: whitesmoke;
+}
 
 /*Login & Register */
 .error-message {
