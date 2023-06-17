@@ -11,6 +11,10 @@ const Register = ({ setRenderRegister, showLogin }) => {
       setErrorMessage('Minimum password length is 4 characters');
       return;
     }
+    if (username.length < 2) {
+      setErrorMessage('Minimum username length is 2 characters');
+      return;
+    }
     try {
       const response = await fetch("http://localhost:8000/users", {
         method: 'POST',
