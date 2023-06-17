@@ -150,6 +150,9 @@
   color: #000;
 }
 /* Add Book */
+.goBack{
+  margin-top: 1rem;
+}
 .dropzone {
   border: 2px dashed #ccc;
   padding: 20px;
@@ -668,5 +671,15 @@ a{
   .slick-next {
     right: 0px!important;
   }
+  .form-container{
+    margin-bottom: 5rem;
+  }
 
+}
+@media (min-width: 1200px) {
+.bestSelling{
+
+  width: 60vw;
+  
+}
 }
