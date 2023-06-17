@@ -54,7 +54,7 @@
   font-family: Arial, sans-serif;
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+
 }
 .bestSelling{
   margin: 4rem;
@@ -131,7 +131,7 @@
 }
 
 .slick-prev {
-  left: 22px!important;
+  left: -10px!important;
 }
 
 .slick-next {
@@ -636,6 +636,20 @@ a{
   }
   .ordersSubmittedContainer{
     margin-bottom: 2rem;
+  }
+  .bestsellingTitle{
+    width: 100vw;
+  }
+  .bookElement{
+    padding:0rem;
+    padding-top: 1rem;
+  }
+  .slick-prev {
+    left: 1px!important;
+  }
+  
+  .slick-next {
+    right: 0px!important;
   }
 
 }
