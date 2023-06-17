@@ -315,8 +315,11 @@ function Homepage() {
                       <span className="checkmark">&#10003;</span>
                     </div>
                   )}
-                  <button className='deleteBtn' onClick={() => handleDelete(item.id)}> Delete </button>
+                 <div className='btnContainer'> 
+                 
                   <button className='updateBtn' > <Link to= {`/update/${item.id}`}> Update </Link>  </button>
+                  <button className='deleteBtn' onClick={() => handleDelete(item.id)}> Delete </button>
+                  </div>
               </div> 
               ))
               }
