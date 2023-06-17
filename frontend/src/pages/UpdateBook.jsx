@@ -148,7 +148,7 @@ function UpdateBook() {
               <button className="submitBtn" type="submit" > Update </button>
               {error && "Something went wrong!"}
               <br></br>
-              <Link to="/">Back</Link>
+              <div className='goBack'> <Link to="/">Back</Link>  </div>
         
             </div>
             </form>
