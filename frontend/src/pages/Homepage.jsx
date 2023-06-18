@@ -12,7 +12,6 @@ import Register from './Register'
 import logoutLogo from "../images/logoutLogo.svg"
 
 function Homepage() {
-
     const [books, setBooks] = useState([])
     const [bestBooks, setBestBooks] = useState([])
     const [cartCounter, setCartCounter] = useState(0)
@@ -73,38 +72,33 @@ function Homepage() {
     };
     
     const addToCart = (bookId, e) => {
-        fetch(`http://localhost:8000/books/${bookId}`)
-          .then((response) => response.json())
-          .then((data) => {
-            const book = data[0];
-            const existingItem = cartItems.find((item) => item.id === book.id);
-            if (existingItem) {
-              // If item already exists in the cart, update the quantity and totalPrice
-              const updatedItems = cartItems.map((item) => {
-                if (item.id === book.id) {
-                  return { ...item, quantity: item.quantity + 1, totalPrice: (item.quantity + 1) * book.price };
-                }
-                return item;
-              });
-              setCartItems(updatedItems);
-       
-              
-            } else {
-              // If item doesn't exist in the cart, add it with quantity and totalPrice
-              const newItem = { ...book, quantity: 1, totalPrice: book.price };
-              setCartItems([...cartItems, newItem]);
-              
-            }
-            setCartCounter(prevState => prevState +1)
-            localStorage.setItem('cartItems', JSON.stringify(cartItems))
-            handleAddToCart(e)
-          })
-        
-          .catch((error) => {
-            console.error('Error fetching book price:', error);
-          });
-          
-      };   
+      axios.get(`http://localhost:8000/books/${bookId}`)
+        .then((response) => response.data)
+        .then((data) => {
+          const book = data[0];
+          const existingItem = cartItems.find((item) => item.id === book.id);
+          if (existingItem) {
+            // If item already exists in the cart, update the quantity and totalPrice
+            const updatedItems = cartItems.map((item) => {
+              if (item.id === book.id) {
+                return { ...item, quantity: item.quantity + 1, totalPrice: (item.quantity + 1) * book.price };
+              }
+              return item;
+            });
+            setCartItems(updatedItems);
+          } else {
+            // If item doesn't exist in the cart, add it with quantity and totalPrice
+            const newItem = { ...book, quantity: 1, totalPrice: book.price };
+            setCartItems([...cartItems, newItem]);
+          }
+          setCartCounter((prevState) => prevState + 1);
+          localStorage.setItem('cartItems', JSON.stringify(cartItems));
+          handleAddToCart(e);
+        })
+        .catch((error) => {
+          console.error('Error fetching book price:', error);
+        });
+    };
        
       const removeCartItem = (itemId) => {
         const removedItem = cartItems.find((item) => item.id === itemId);
@@ -139,12 +133,12 @@ function Homepage() {
       };
       
       const checkOutFinal = async () => {
-        setLoading(true)
+        setLoading(true);
         if (!Array.isArray(cartItems)) {
           console.error('cartItems is not an array');
           return;
         }
-        
+      
         const token = localStorage.getItem('token');
         if (token) {
           const userId = localStorage.getItem('id');
@@ -160,29 +154,28 @@ function Homepage() {
           }));
           const finalTotalPrice = itemsToAdd.reduce((total, item) => total + item.total_price, 0);
           try {
-            const cartResponse = await fetch(`http://localhost:8000/cartuser/${userId}/add`, {
-              method: 'POST',
+            const cartResponse = await axios.post(`http://localhost:8000/cartuser/${userId}/add`, itemsToAdd, {
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
               },
-              body: JSON.stringify(itemsToAdd),
             });
       
-            if (cartResponse.ok) {
+            if (cartResponse.status === 200) {
               console.log('Items added to cart');
       
-              const emailResponse = await fetch('http://localhost:8000/sendemail', {
-                method: 'POST',
+              const emailResponse = await axios.post('http://localhost:8000/sendemail', {
+                id: userId,
+                orderDetails: itemsToAdd,
+                final: finalTotalPrice,
+              }, {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: userId, orderDetails: itemsToAdd, final:finalTotalPrice }),
               });
       
-              if (emailResponse.ok) {
+              if (emailResponse.status === 200) {
                 console.log('Email sent');
-             
               } else {
                 console.error('Failed to send email');
                 throw new Error('Failed to send email');
@@ -196,7 +189,7 @@ function Homepage() {
             console.error('Error adding items to cart or sending email:', error);
           }
         }
-        setLoading(false)
+        setLoading(false);
       };
       
       const [renderBooks, setRenderbooks] = useState(true);

@@ -1,41 +1,35 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function Login({ setRenderLogin, setRenderRegister }) {
+ 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/users/login", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
+      const response = await axios.post("http://localhost:8000/users/login", {
+        username,
+        password,
       });
-
-      if (response.ok) {
-        // Login successful
-        const data = await response.json();
-        const { token } = data;
+  
+      if (response.status === 200) {
+        const { token } = response.data;
         localStorage.setItem('token', token);
         console.log('Login successful');
-
-        // Fetch user details using token
+  
         try {
-          const userResponse = await fetch("http://localhost:8000/user", {
-            method: 'GET',
+          const userResponse = await axios.get("http://localhost:8000/user", {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
           });
-
-          if (userResponse.ok) {
+  
+          if (userResponse.status === 200) {
             console.log(userResponse);
-            const userData = await userResponse.json();
+            const userData = userResponse.data;
             const { username, id } = userData;
             console.log(userData);
             localStorage.setItem('id', id);
@@ -49,15 +43,9 @@ function Login({ setRenderLogin, setRenderRegister }) {
         } catch (error) {
           setError('Error retrieving user details');
         }
-
+  
         setRenderLogin(false);
-      } else if (response.status === 401) {
-        // Invalid credentials (username or password)
-        setError('Invalid credentials');
-      } else {
-        // Other login error
-        setError('Login failed');
-      }
+      } 
     } catch (error) {
       setError('Error during login');
     }
@@ -70,6 +58,7 @@ function Login({ setRenderLogin, setRenderRegister }) {
     setPassword('');
     setError('');
   };
+
 
   return (
     <>

@@ -1,39 +1,39 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const LoggedCartToday = () => {
+ 
   const [cartsItems, setCartsItems] = useState([]);
   const [finalTotalPrice, setFinalTotalPrice] = useState(0);
 
   useEffect(() => {
-    // Function to fetch cart items for logged-in user
-    const fetchCartItems = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          return;
-        }
-        const userId = localStorage.getItem('id')
-        const response = await fetch(`http://localhost:8000/cartuser/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setCartsItems(data);
-          const totalPrice = data.reduce((total, item) => total + item.total_price, 0);
-          setFinalTotalPrice(totalPrice);
-        } else {
-          console.error('Failed to fetch cart items');
-        }
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
+  const fetchCartItems = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return;
       }
-    };
+      const userId = localStorage.getItem('id')
+      const response = await axios.get(`http://localhost:8000/cartuser/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-    fetchCartItems();
+      if (response.status === 200) {
+        const data = response.data;
+        setCartsItems(data);
+        const totalPrice = data.reduce((total, item) => total + item.total_price, 0);
+        setFinalTotalPrice(totalPrice);
+      } else {
+        console.error('Failed to fetch cart items');
+      }
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+    }
+  };
+
+  fetchCartItems();
   }, []);
   
   return (

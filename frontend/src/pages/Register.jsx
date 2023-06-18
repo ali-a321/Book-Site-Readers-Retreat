@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Register = ({ setRenderRegister, showLogin }) => {
   const [email, setEmail] = useState('');
@@ -16,19 +17,21 @@ const Register = ({ setRenderRegister, showLogin }) => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:8000/users", {
-        method: 'POST',
+      const response = await axios.post("http://localhost:8000/users", {
+        username,
+        email,
+        password,
+      }, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email , password }),
       });
-
-      if (response.ok) {
+      console.log(response)
+      if (response.status === 201) {
         console.log('Registration successful');
         closeRegister();
       } else {
-        const data = await response.json();
+        const data = response.data;
         const { message } = data;
         setErrorMessage(message || 'Registration failed');
       }

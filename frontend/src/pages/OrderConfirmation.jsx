@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const OrderConfirmation = () => {
   const [cartsItems, setCartsItems] = useState([]);
   const [finalTotalPrice, setFinalTotalPrice] = useState(0);
-  const navigate  = useNavigate()
- 
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -13,16 +14,16 @@ const OrderConfirmation = () => {
         if (!token) {
           return;
         }
-        const userId = localStorage.getItem('id')
-        const response = await fetch(`http://localhost:8000/cartnow/${userId}`, {
-          method: 'GET',
+        const userId = localStorage.getItem('id');
+  
+        const response = await axios.get(`http://localhost:8000/cartnow/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
-
-        if (response.ok) {
-          const data = await response.json();
+  
+        if (response.status === 200) {
+          const data = response.data;
           setCartsItems(data);
           const totalPrice = data.reduce((total, item) => total + item.total_price, 0);
           setFinalTotalPrice(totalPrice);
@@ -33,7 +34,7 @@ const OrderConfirmation = () => {
         console.error('Error fetching cart items:', error);
       }
     };
-
+  
     fetchCartItems();
   }, []);
   
