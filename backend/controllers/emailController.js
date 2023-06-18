@@ -19,13 +19,13 @@ const sendEmail = async (req, res) => {
           const transporter = nodemailer.createTransport({
             service: 'hotmail',
             auth: {
-              user: 'a1i86@outlook.com',
+              user: 'readersretreatorder@outlook.com',
               pass: process.env.EMAILPASS,
             },
           });
 
           const mailOptions = {
-            from: 'a1i86@outlook.com',
+            from: 'readersretreatorder@outlook.com',
             to: email,
             subject: "Order Confirmation: Readers' Retreat ",
             html: `
