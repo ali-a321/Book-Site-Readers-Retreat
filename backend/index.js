@@ -16,8 +16,9 @@ app.use(express.json())
 app.use("/", require('./routes/bookRoutes'))
 app.use("/", require('./routes/userRoutes'))
 app.use("/", require('./routes/emailRoutes'))
+app.use("/", require('./routes/oauthRoutes'))
 
-
+app.get("/", (req,res) => res.json("server is running"))
 app.listen(8000, () => {
     console.log("Server Running")
 })
