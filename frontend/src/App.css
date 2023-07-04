@@ -513,6 +513,32 @@ a{
 }
 
 /*Login & Register */
+.seperation{
+  margin: 1rem;
+  margin-top: 2rem;
+  padding: 0 10px;
+  color: #000;
+  border-bottom: 1px solid rgba(34,34,34,.15) !important;
+  width: 100%;
+  text-align: center;
+}
+
+.githubLogo{
+  width: 2rem;
+  margin-right: 0.6rem;
+}
+.githubContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 400px;
+  min-width: 200px;
+  border: 1px solid lightgray;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  border-radius: 5px;
+}
 .error-message {
   color: red;
   font-size: 14px;
@@ -700,3 +726,5 @@ a{
   
 }
 }
+
+

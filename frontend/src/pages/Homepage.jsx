@@ -21,6 +21,7 @@ function Homepage() {
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [userData, setUserData] = useState(null)
 
     useEffect(() => {
         const fetchBestBooks = async () => {
@@ -138,7 +139,8 @@ function Homepage() {
           console.error('cartItems is not an array');
           return;
         }
-      
+        console.log("fired")
+        const social = localStorage.getItem('social');
         const token = localStorage.getItem('token');
         if (token) {
           const userId = localStorage.getItem('id');
@@ -188,7 +190,38 @@ function Homepage() {
           } catch (error) {
             console.error('Error adding items to cart or sending email:', error);
           }
-        }
+        } //Logged in through social media site
+        else if(social){
+          // Create an array of items to be added to the cart
+          const itemsToAdd = cartItems.map((item) => ({
+            book_id: item.id,
+            title: item.title,
+            cover: item.cover,
+            price: item.price,
+            quantity: item.quantity,
+            total_price: item.totalPrice,
+          }));
+          const finalTotalPrice = itemsToAdd.reduce((total, item) => total + item.total_price, 0);
+          const emailResponse = await axios.post('http://localhost:8000/sendemailsocial', {
+            email: social,
+            orderDetails: itemsToAdd,
+            final: finalTotalPrice,
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+  
+          if (emailResponse.status === 200) {
+            console.log('Email sent');
+          } else {
+            console.error('Failed to send email');
+            throw new Error('Failed to send email');
+          }
+  
+          navigate('/orderconfirmation');
+          }        
+    
         setLoading(false);
       };
       
@@ -233,6 +266,11 @@ function Homepage() {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
         localStorage.removeItem('id');
+        localStorage.removeItem('social');
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, document.title, url.pathname);
         window.location.reload();
         
       };
@@ -246,8 +284,9 @@ function Homepage() {
           {username}
    
           <div className="cart-link" >
-          
+            
           {username ? (
+            
             <img src={logoutLogo} alt="logout button" className="userLogo" onClick={()=> handleLogout()}/>
           ) : (
             <img src={userLogo} alt="user account logo" className="userLogo" onClick={() => showLogin()} />
@@ -256,10 +295,18 @@ function Homepage() {
               <span className="cart-counter"  onClick={()=> gotoCheck()}> {cartCounter}</span>
             )}
           </div>
+          <div> 
+
+           
+          </div>
+
           <img src= {shoppingLogo} alt='shopping cart logo' className='shoppingCartLogo' onClick={()=> gotoCheck()}/>  </div>
         </div>
+        
         <div className={`popup-container ${renderLogin ? 'open' : ''}`} onClick={handleClickOutside}>
-          <Login setRenderLogin = {setRenderLogin} setRenderRegister = {setRenderRegister}/>
+          <Login setRenderLogin = {setRenderLogin} setRenderRegister = {setRenderRegister} 
+          setUserData ={setUserData} userData={userData} renderLogin= {renderLogin}
+          />
         </div>
       
         <div className={`registerPopup-container ${renderRegister ? 'open' : ''}`} onClick={registerClickOut}>
@@ -320,6 +367,8 @@ function Homepage() {
               </div>
             </div>
               <div className='addContainer'><button className='addBtn'> <Link to ="/add"> Add new Book </Link>  </button> </div>       
+          
+              
          </>
             : <Checkout cartItems={cartItems} removeCartItem={removeCartItem} updateQuantity= {updateQuantity} 
                 checkOutFinal = {checkOutFinal} gotoHome= {gotoHome} showLogin={showLogin} loading = {loading}/> } 

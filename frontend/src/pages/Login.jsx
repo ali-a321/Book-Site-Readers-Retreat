@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Oauth from './Oauth';
 
-function Login({ setRenderLogin, setRenderRegister }) {
+function Login({ setRenderLogin, setRenderRegister, setUserData, userData, renderLogin }) {
  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -86,6 +87,13 @@ function Login({ setRenderLogin, setRenderRegister }) {
           {error && <div className="error-message">{error}</div>}
           <div onClick={showRegister}>Don't have an account? Register here</div>
         </form>
+       
+        <div className='seperation'> </div>
+      
+
+        <Oauth  setUserData ={setUserData} userData={userData} 
+        setRenderLogin= {setRenderLogin} renderLogin= {renderLogin}/>
+
       </div>
     </>
   );

@@ -21,7 +21,8 @@ const CartTotal = ({ cartItems, checkOutFinal, gotoHome, showLogin,loading }) =>
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
+    const social = localStorage.getItem('social');
+    if (token || social) {
       setLoggedIn(true);
     } else {
       setLoggedIn(false);
