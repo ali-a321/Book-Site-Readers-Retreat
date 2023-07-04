@@ -23,8 +23,7 @@ const Oauth = ({setUserData, userData, setRenderLogin, renderLogin}) => {
       if (code) {
         try {
           const response = await axios.get(`http://localhost:8000/callback/${code}`);
-          setUserData(response.data); // Store the user data in the state
-          console.log(response.data); // Log the userProfile data
+          setUserData(response.data); 
           localStorage.setItem("social", response.data.email)
           localStorage.setItem("username", response.data.login)
         } catch (error) {
@@ -43,9 +42,8 @@ const Oauth = ({setUserData, userData, setRenderLogin, renderLogin}) => {
     }
   }
   const handleCallBackResponse = (response) => {
-    console.log(response.credential) //JWT TOKEN
     const userobject = jwt_decode(response.credential)
-    console.log(userobject)
+
     localStorage.setItem("social", userobject.email)
     localStorage.setItem('username', userobject.given_name);
     document.getElementById("signInDiv").hidden = true

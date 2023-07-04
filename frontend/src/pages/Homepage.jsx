@@ -37,6 +37,9 @@ function Homepage() {
         
     }, [])
 
+    useEffect(() => {
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }, [cartItems]);
     const handleDelete = async (bookid) => {
         try {
            await axios.delete(`http://localhost:8000/books/${bookid}`)
@@ -239,9 +242,7 @@ function Homepage() {
         totalBooks(cartItems); 
       }, []);
     
-      useEffect(() => {
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-      }, [cartItems]);
+   
     
       const [renderLogin, setRenderLogin] = useState(false);
       const [renderRegister, setRenderRegister] = useState(false);
