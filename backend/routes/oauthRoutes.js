@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {sendCode,getUserEmail,getUserProfile, getAccessToken, sendGoogleCode,getGoogleAccessToken,getGoogleUserProfile} = require("../controllers/oauthController")
+const {sendCode,getUserEmail,getUserProfile, getAccessToken} = require("../controllers/oauthController")
 
 //Github
 router.get('/callback/:code', sendCode);
