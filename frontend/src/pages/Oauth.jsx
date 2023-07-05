@@ -8,10 +8,10 @@ const Oauth = ({setUserData, userData, setRenderLogin, renderLogin}) => {
 
   const handleLogin = () => {
     const githubUrl = 'https://github.com/login/oauth/authorize';
-    const clientId = 'ff31982da7a359a4de68';
+    const clientId = '82ff9ff88ef81be5b527';
     const redirectUri = 'http://localhost:3000';
 
-    window.location.href = `${githubUrl}?client_id=${clientId}&redirect_uri=${redirectUri}`;
+    window.location.href = `${githubUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email`;
   };
 
  
@@ -24,8 +24,9 @@ const Oauth = ({setUserData, userData, setRenderLogin, renderLogin}) => {
         try {
           const response = await axios.get(`http://localhost:8000/callback/${code}`);
           setUserData(response.data); 
-          localStorage.setItem("social", response.data.email)
-          localStorage.setItem("username", response.data.login)
+          const userInformation = response.data
+          localStorage.setItem("social", userInformation.email)
+          localStorage.setItem("username", userInformation.profile.login)
         } catch (error) {
           console.error('Failed to fetch user data:', error);
           // Handle error state or display error message
