@@ -28,10 +28,10 @@ const getUserProfile = async (accessToken) => {
   try {
     const response = await axios.get('https://api.github.com/user', {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `token ${accessToken}`
       }
     });
-
+    console.log(response.data)
     return response.data;
   } catch (error) {
     throw new Error('Failed to fetch user profile');
@@ -44,17 +44,18 @@ const getUserEmail = async (accessToken) => {
   try {
     const response = await axios.get('https://api.github.com/user/emails', {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Accept: 'application/json',
+        Authorization: `token ${accessToken}`
       }
     });
     
     const userEmails = response.data;
-    console.log(userEmails)
     const primaryEmail = userEmails.find(email => email.primary);
-
     return primaryEmail.email;
   } catch (error) {
-    throw new Error('Failed to fetch user email');
+    if(error){
+      console.log("failed to get user email")
+    }
   }
 };
 
@@ -65,19 +66,19 @@ const sendCode = async (req, res) => {
   try {
     const accessToken = await getAccessToken(code);
     const userProfile = await getUserProfile(accessToken);
-    // const userEmail = await getUserEmail(accessToken)
-    // // Send the userProfile data in the response
-    // const userData = {
-    //   profile: userProfile,
-    //   email: userEmail
-    // };
-
-    // Send the userData object in the response
-    res.json(userProfile);
+    const userEmail = await getUserEmail(accessToken)
+    // Send the userProfile data in the response
+    const userData = {
+      profile: userProfile,
+      email: userEmail
+    };
+ 
+    res.json(userData);
   } catch (error) {
     // Handle error
-    console.error(error);
-    res.status(500).send('Authentication failed!');
+      console.error(error);
+      res.status(500).send('Authentication failed!');
+  
   }
 };
 
@@ -142,5 +143,4 @@ const sendGoogleCode = async (req, res) => {
 
 
 
-module.exports = {sendCode,getUserEmail,getUserProfile, getAccessToken,
-                 sendGoogleCode,getGoogleAccessToken,getGoogleUserProfile };
+module.exports = {sendCode,getUserEmail,getUserProfile, getAccessToken };
