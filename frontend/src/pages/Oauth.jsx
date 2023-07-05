@@ -75,11 +75,13 @@ const Oauth = ({setUserData, userData, setRenderLogin, renderLogin}) => {
   
 
   return (
-    <div>
+    <div className='socialLoginContainer'>
       <div id= "signInDiv">  </div>
       <div className='githubContainer' onClick={handleLogin}>
+        <div className='cen'> 
         <img src={githubLogo} className='githubLogo'/> 
-        <div> Continue with GitHub</div>
+        <div className='githubText'> Sign in with GitHub</div>
+        </div>
       </div> 
     </div>
   );
