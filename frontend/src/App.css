@@ -522,22 +522,50 @@ a{
   width: 100%;
   text-align: center;
 }
+.socialLoginContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
+}
+.cen{
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+}
+#signInDiv{
+  width: 100%;
+
+  
+}
 .githubLogo{
-  width: 2rem;
+  width: 1.5rem;
   margin-right: 0.6rem;
 }
 .githubContainer{
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 400px;
-  min-width: 200px;
   border: 1px solid lightgray;
   cursor: pointer;
+  width: 182px;
+  height: 44px;
   margin-bottom: 1rem;
   margin-top: 1rem;
   border-radius: 5px;
+
+}
+.githubText{
+  flex-grow: 1;
+  font-family: "Google Sans",arial,sans-serif;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+  font-size: 14px;
+  color: #202124;
+  text-align: center;
 }
 .error-message {
   color: red;
